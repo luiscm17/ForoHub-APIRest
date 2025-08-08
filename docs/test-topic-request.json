@@ -1,0 +1,17 @@
+{
+    "title": "Duda sobre Spring Security",
+    "message": "¿Cómo configuro la autenticación JWT en Spring Boot 3?",
+    "authorId": 1,
+    "course": "JAVA",
+    "user": {
+        "id": 1,
+        "name": "Juan Pérez",
+        "email": "juan.perez@ejemplo.com",
+        "password": "password123",
+        "profile": {
+            "id": 1,
+            "user": "juan_perez"
+        }
+    },
+    "status": "NO_RESPONSE"
+}
