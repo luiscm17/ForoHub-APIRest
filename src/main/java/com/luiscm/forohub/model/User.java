@@ -4,6 +4,8 @@ import com.luiscm.forohub.model.dto.UserRegisterDTO;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,6 +38,7 @@ public class User {
     @Column(nullable = false, length = 12)
     private String telephone;
     
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private Profile profile;
 
