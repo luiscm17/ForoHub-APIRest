@@ -32,14 +32,18 @@ public class User {
     
     @Column(nullable = false, length = 60)
     private String password;
+
+    @Column(nullable = false, length = 12)
+    private String telephone;
     
     @Column(nullable = false, length = 30)
     private Profile profile;
 
     public User(UserRegisterDTO userData) {
         this.name = userData.name();
-        this.email = userData.email();
+        this.email = userData.email();  
         this.password = userData.password();
+        this.telephone = userData.telephone();
         this.profile = userData.profile();
     }
     
