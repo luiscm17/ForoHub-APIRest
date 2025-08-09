@@ -6,19 +6,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.luiscm.forohub.model.dto.TopicRegisterDTO;
-import com.luiscm.forohub.model.Topic;
-import com.luiscm.forohub.repository.TopicRepository;
+import com.luiscm.forohub.model.dto.UserRegisterDTO;
+import com.luiscm.forohub.model.User;
+import com.luiscm.forohub.repository.UserRepository;
 
 @RestController
-@RequestMapping("/topics")
-public class TopicController {
+@RequestMapping("/users")
+public class UserController {
     
     @Autowired
-    private TopicRepository topicRepository;
+    private UserRepository userRepository;
 
     @PostMapping
-    public void createTopic(@RequestBody TopicRegisterDTO topic) {
-        topicRepository.save(new Topic(topic));
+    public UserRegisterDTO createUser(@RequestBody UserRegisterDTO userData) {
+        userRepository.save(new User(userData));
+        return userData;
     }
 }

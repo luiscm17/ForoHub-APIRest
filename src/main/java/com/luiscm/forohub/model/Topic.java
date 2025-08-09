@@ -3,6 +3,8 @@ package com.luiscm.forohub.model;
 
 import java.time.LocalDateTime;
 
+import com.luiscm.forohub.model.dto.TopicRegisterDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,30 +19,47 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.Column;
 
-@Table(name = "topics")
 @Entity
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Table(name = "topics")
 @EqualsAndHashCode(of = {"id"})
 public class Topic {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+    
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String message;
-    private LocalDateTime date;
+    
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
     
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private StatusTopic status;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name= "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name= "user_id", nullable = false)
     private User user;
     
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name= "course_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name= "course_id", nullable = false)
     private Course course;
+    
+    public Topic(TopicRegisterDTO topic) {
+        this.id = null;
+        this.title = topic.title();
+        this.message = topic.message();
+        this.createdAt = LocalDateTime.now();
+        this.status = topic.status();
+    }
 
 }
