@@ -1,9 +1,11 @@
-create table users (
-    id bigint not null auto_increment,
-    name varchar(100) not null,
-    email varchar(100) not null unique,
-    password varchar(60) not null,
-    profile varchar(30) not null,
-
-    primary key (id)
+CREATE TABLE users (
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(60) NOT NULL,
+    telephone VARCHAR(20),
+    profile VARCHAR(30) NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
 );

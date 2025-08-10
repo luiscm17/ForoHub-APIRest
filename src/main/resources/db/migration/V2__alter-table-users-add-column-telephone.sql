@@ -1,1 +1,0 @@
-alter table users add telephone varchar(12) not null;

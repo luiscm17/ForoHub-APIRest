@@ -313,7 +313,115 @@ graph TD
 
 ### 📚 Flujo de un Tópico en ForoHub
 
+## 🔄 Flujo Genérico de una Petición REST
+
+### Diagrama de Flujo Genérico
+
+```
+Cliente HTTP (Frontend/Postman)
+     │
+     ▼ (1) Realiza petición HTTP
+     │   - Método (GET, POST, PUT, DELETE)
+     │   - URL del recurso
+     │   - Cuerpo (opcional)
+     │   - Headers (Content-Type, Authorization, etc.)
+     │
+     ▼
+Controlador (Controller)
+     │
+     ▼ (2) Valida la petición
+     │   - Valida el DTO con @Valid
+     │   - Verifica autenticación/autorización
+     │   - Maneja excepciones
+     │
+     ▼ (3) Orquesta la lógica
+     │   - Llama a los servicios necesarios
+     │   - Gestiona transacciones con @Transactional
+     │
+     ▼ (4) Construye la respuesta
+     │   - Crea DTOs de respuesta
+     │   - Establece códigos de estado HTTP
+     │   - Agrega headers necesarios (Location, ETag, etc.)
+     │
+     ▼ (5) Retorna la respuesta
+     │   - 2xx: Éxito
+     │   - 4xx: Error del cliente
+     │   - 5xx: Error del servidor
+     │
+     ▼
+Cliente HTTP
+```
+
+### Explicación del Flujo
+
+1. **Cliente HTTP**
+   - Inicia la comunicación enviando una petición HTTP
+   - Especifica el verbo (GET, POST, PUT, DELETE, etc.)
+   - Incluye la ruta del recurso y parámetros necesarios
+   - Opcionalmente envía datos en el cuerpo (para POST/PUT)
+
+2. **Validación**
+   - Spring valida automáticamente los datos de entrada
+   - Se verifican las anotaciones como @NotBlank, @Size, etc.
+   - Se manejan excepciones de validación globalmente
+
+3. **Lógica de Negocio**
+   - El controlador delega la lógica a los servicios
+   - Los servicios pueden usar múltiples repositorios
+   - Se aplican reglas de negocio y validaciones complejas
+
+4. **Acceso a Datos**
+   - Los repositorios manejan la persistencia
+   - Se realizan operaciones CRUD en la base de datos
+   - Se gestionan transacciones para mantener la integridad
+
+5. **Respuesta**
+   - Se transforman las entidades a DTOs
+   - Se aplican códigos de estado HTTP apropiados
+   - Se incluyen headers relevantes (Location para recursos creados)
+
+### Ejemplo de Flujo Típico
+
+1. **POST /recursos**
+
+   ```http
+   Cliente → POST /recursos con JSON
+   Controlador → Valida → Servicio → Repositorio → Guarda → Retorna 201
+   ```
+
+2. **GET /recursos/{id}**
+
+   ```http
+   Cliente → GET /recursos/1
+   Controlador → Servicio → Repositorio → Busca por ID → Retorna 200 con recurso
+   ```
+
+3. **PUT /recursos/{id}**
+
+   ```http
+   Cliente → PUT /recursos/1 con JSON
+   Controlador → Valida → Servicio → Actualiza → Retorna 200/204
+   ```
+
+4. **DELETE /recursos/{id}**
+
+   ```http
+   Cliente → DELETE /recursos/1
+   Controlador → Servicio → Elimina → Retorna 204
+   ```
+
+### Buenas Prácticas
+
+- Usar DTOs para la entrada/salida de datos
+- Mantener los controladores delgados
+- Delegar lógica de negocio a los servicios
+- Manejar excepciones de forma centralizada
+- Documentar los endpoints con Swagger/OpenAPI
+- Implementar paginación para colecciones grandes
+- Usar códigos de estado HTTP apropiados
+
 1. **Creación de un Tópico (POST /api/topicos)**
+
    ```mermaid
    sequenceDiagram
        participant Estudiante
@@ -341,6 +449,7 @@ graph TD
    ```
 
 2. **Listado de Tópicos (GET /api/topicos)**
+
    ```mermaid
    sequenceDiagram
        participant Estudiante

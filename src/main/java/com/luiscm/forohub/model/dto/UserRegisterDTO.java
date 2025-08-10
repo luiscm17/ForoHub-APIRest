@@ -16,7 +16,7 @@ public record UserRegisterDTO(
 
     @NotBlank String telephone,
     
-    @NotBlank @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$") String password,
+    @NotBlank @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$") String password,
     
     @NotNull @Valid Profile profile
 ) {

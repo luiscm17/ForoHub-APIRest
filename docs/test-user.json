@@ -1,7 +1,7 @@
 {
-    "name": "Carlos López",
-    "email": "carlos.lopez@ejemplo.com",
-    "password": "Admin#1234",
-    "telephone": "987654321",
-    "profile": "ADMIN"
+    "name": "María Fernández",
+    "email": "maria.fernandez@ejemplo.com",
+    "telephone": "923456789",
+    "password": "Usuario#123",
+    "profile": "USER"
 }

@@ -5,50 +5,111 @@ API REST para un sistema de foros desarrollada con Spring Boot 3.x siguiendo una
 ## 🏗️ Estructura del Proyecto
 
 ```yml
-src/main/java/com/forohub/forohub/
-├── config/                     # Configuraciones
-│   ├── SecurityConfig.java     # @Configuration class
-│   └── SwaggerConfig.java      # @Configuration class
-├── controller/                 # Controladores REST
-│   ├── TopicController.java    # @RestController class
-│   ├── ReplyController.java    # @RestController class
-│   ├── UserController.java     # @RestController class
-│   └── CourseController.java   # @RestController class
-├── model/                      # Entidades JPA
-│   ├── Topic.java              # @Entity class
-│   ├── Reply.java              # @Entity class
-│   ├── User.java               # @Entity class
-│   ├── Course.java             # @Entity class
-│   └── dto/                    # Objetos de Transferencia de Datos
-│       ├── TopicDTO.java       # record
-│       ├── TopicRegisterDTO.java # record
-│       ├── ReplyDTO.java       # record
-│       └── UserDTO.java        # record
-├── repository/                 # Repositorios JPA
-│   ├── TopicRepository.java    # interface (JpaRepository)
-│   ├── ReplyRepository.java    # interface (JpaRepository)
-│   ├── UserRepository.java     # interface (JpaRepository)
-│   └── CourseRepository.java   # interface (JpaRepository)
-├── service/                    # Lógica de negocio
-│   ├── TopicService.java       # @Service class
-│   ├── ReplyService.java       # @Service class
-│   ├── UserService.java        # @Service class
-│   └── CourseService.java      # @Service class
-└── exception/                  # Manejo de excepciones
-    ├── GlobalExceptionHandler.java  # @ControllerAdvice
-    └── ResourceNotFoundException.java # RuntimeException
+src/main/java/com/luiscm/forohub/
+├── config/                             # Configuraciones de la aplicación
+│   ├── SwaggerConfig.java              # @Configuration para documentación OpenAPI/Swagger
+│   └── SecurityConfig.java             # @Configuration para seguridad y autenticación
+│
+├── controller/                         # Controladores REST (@RestController)
+│   ├── TopicController.java            # Endpoints para gestión de temas
+│   ├── UserController.java             # Endpoints para gestión de usuarios
+│   ├── ReplyController.java            # Endpoints para gestión de respuestas
+│   └── CourseController.java           # Endpoints para gestión de cursos
+│
+├── model/                              # Modelo de dominio
+│   ├── dto/                            # Objetos de Transferencia de Datos (records)
+│   │   ├── topic/                      # DTOs para temas
+│   │   │   ├── TopicRegisterDTO.java   # @Valid record para registro de temas
+│   │   │   ├── TopicListDTO.java       # Proyección para listado de temas
+│   │   │   └── TopicDetailDTO.java     # DTO con detalles completos de tema
+│   │   │
+│   │   ├── user/                       # DTOs para usuarios
+│   │   │   ├── UserRegisterDTO.java    # @Valid record para registro de usuarios
+│   │   │   ├── UserListDTO.java        # Proyección para listado de usuarios
+│   │   │   └── UserUpdateDTO.java      # @Valid record para actualización
+│   │   │
+│   │   └── reply/                      # DTOs para respuestas
+│   │       ├── ReplyRegisterDTO.java   # @Valid record para nuevas respuestas
+│   │       └── ReplyListDTO.java       # Proyección para listado de respuestas
+│   │
+│   ├── entity/                         # Entidades JPA (@Entity)
+│   │   ├── Course.java                 # @Entity para cursos
+│   │   ├── Topic.java                  # @Entity para temas con relaciones
+│   │   ├── User.java                   # @Entity para usuarios
+│   │   └── Reply.java                  # @Entity para respuestas
+│   │
+│   └── enums/                          # Enumeraciones
+│       ├── Profile.java                # Roles de usuario (ADMIN, INSTRUCTOR, STUDENT)
+│       └── StatusTopic.java            # Estados de tema (NO_RESPONDIDO, NO_SOLUCIONADO, etc.)
+│
+├── repository/                         # Repositorios JPA (JpaRepository)
+│   ├── CourseRepository.java           # @Repository para cursos
+│   ├── TopicRepository.java            # @Repository con consultas personalizadas
+│   ├── UserRepository.java             # @Repository con consultas de usuarios
+│   └── ReplyRepository.java            # @Repository para respuestas
+│
+├── service/                            # Lógica de negocio (@Service)
+│   ├── CourseService.java              # Lógica para gestión de cursos
+│   ├── TopicService.java               # Lógica para gestión de temas
+│   ├── UserService.java                # Lógica para gestión de usuarios
+│   └── ReplyService.java               # Lógica para gestión de respuestas
+│
+└── exception/                          # Manejo de excepciones
+    ├── GlobalExceptionHandler.java     # @ControllerAdvice para manejo global
+    ├── ResourceNotFoundException.java  # Excepción para recursos no encontrados
+    └── ValidationError.java            # Estructura para errores de validación
 ```
 
 ## 📊 Diagrama de Base de Datos
 
-![Diagrama de Base de Datos](docs/db_diagram.png)
-
-```erDiagram
+```mermaid
+erDiagram
     users ||--o{ topics : "1:N"
     users ||--o{ replies : "1:N"
     topics ||--o{ replies : "1:N"
     courses ||--o{ topics : "1:N"
     
+    users {
+        bigint id PK
+        string name
+        string email
+        string password
+        string telephone
+        string profile
+        boolean active
+        datetime created_at
+    }
+    
+    topics {
+        bigint id PK
+        string title
+        text message
+        string status
+        bigint user_id FK
+        bigint course_id FK
+        datetime created_at
+        boolean active
+    }
+    
+    replies {
+        bigint id PK
+        text message
+        bigint user_id FK
+        bigint topic_id FK
+        boolean solution
+        datetime created_at
+        boolean active
+    }
+    
+    courses {
+        bigint id PK
+        string name
+        string category
+        boolean active
+    }
+```
+
+```sql
     users {
         bigint id PK
         varchar(100) name
@@ -204,7 +265,7 @@ GET /api/topics?page=0&size=10&sort=creationDate,desc
 
 3. **Estructura de Paquetes**
 
-   ```
+   ```text
    com.luiscm.forohub
    ├── config/           # Configuraciones de la aplicación
    ├── controller/       # Controladores REST
@@ -305,12 +366,183 @@ springdoc.swagger-ui.operationsSorter=method
    }
    ```
 
-2. **Topic**
+### 2. Topic (Tema)
+
+#### Flujo de Datos: POST /topics
+
+##### 1. Cliente → Controlador
+
+**Solicitud HTTP:**
+
+```http
+POST /topics
+Content-Type: application/json
+
+{
+    "title": "Duda sobre Spring Boot",
+    "message": "¿Cómo manejar excepciones globales?",
+    "userId": 1,
+    "courseId": 1
+}
+```
+
+##### 2. Estructura del Flujo
+
+```mermaid
+graph TD
+    A[Cliente HTTP] -->|1. POST /topics con JSON| B[Controlador]
+    B -->|2. Valida DTO| C[TopicRegisterDTO]
+    B -->|3. Busca entidades| D[Repositorios]
+    B -->|4. Crea entidad| E[Topic]
+    B -->|5. Persiste| F[Base de Datos]
+    B -->|6. Construye respuesta| G[TopicDetailDTO]
+    B -->|7. Retorna 201| A
+    
+    style A fill:#f9f,stroke:#333
+    style B fill:#bbf,stroke:#333
+    style C fill:#bfb,stroke:#333
+    style D fill:#fbb,stroke:#333
+    style E fill:#ffb,stroke:#333
+    style F fill:#bff,stroke:#333
+    style G fill:#fbf,stroke:#333
+```
+
+```mermaid
+Cliente HTTP
+     │
+     ▼ (1) POST /topics con JSON
+Controlador (TopicController)
+     │
+     ▼ (2) Valida DTO
+     │   - @Valid TopicRegisterDTO
+     │
+     ▼ (3) Busca entidades relacionadas
+     │   - userRepository.findById()
+     │   - courseRepository.findById()
+     │
+     ▼ (4) Crea entidad Topic
+     │   - new Topic(data, user, course)
+     │
+     ▼ (5) Persiste
+     │   - topicRepository.save(topic)
+     │   - JPA genera INSERT
+     │
+     ▼ (6) Construye respuesta
+     │   - Crea URI
+     │   - Convierte a TopicDetailDTO
+     │
+     ▼ (7) Retorna 201 Created
+     │   - Incluye Location header
+     │   - Incluye DTO en el cuerpo
+     ▼
+Cliente HTTP
+```
+
+##### 3. Proceso Detallado
+
+1. **Validación**:
+   - Spring valida automáticamente las anotaciones `@NotBlank` y `@NotNull`
+   - Si hay errores, lanza `MethodArgumentNotValidException`
+
+2. **Búsqueda de Entidades**:
 
    ```java
-   @Entity
-   @Table(name = "topics")
-   public class Topic {
+   User user = userRepository.findById(userId)
+       .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+   ```
+
+3. **Creación de la Entidad**:
+   - Se crea un nuevo `Topic` con los datos del DTO
+   - Se establecen valores por defecto:
+     - `status = NO_RESPONSE`
+     - `active = true`
+     - `createdAt` se establece automáticamente
+
+4. **Persistencia**:
+   - Se guarda el tema en la base de datos
+   - Se genera el ID automáticamente
+
+5. **Respuesta**:
+   - Código: 201 Created
+   - Header: `Location: /topics/{id}`
+   - Body: `TopicDetailDTO` con los datos del tema creado
+
+##### 4. Manejo de Errores
+
+- **400 Bad Request**: Validación fallida
+- **404 Not Found**: Usuario o curso no encontrado
+- **500 Internal Server Error**: Error inesperado
+
+##### 5. Entidades y DTOs Implicados
+
+- `TopicRegisterDTO`: Datos de entrada
+- `Topic`: Entidad principal
+- `TopicDetailDTO`: Datos de salida
+- `User` y `Course`: Entidades relacionadas
+
+```java
+@Entity
+@Table(name = "topics")
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class Topic {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(nullable = false, length = 100)
+    private String title;
+    
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String message;
+    
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StatusTopic status;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
+    
+    @Column(columnDefinition = "TEXT", nullable = true)
+    private String reply;
+    
+    // Constructor para registro
+    public Topic(TopicRegisterDTO topicData, User user, Course course) {
+        this.title = topicData.title();
+        this.message = topicData.message();
+        this.user = user;
+        this.course = course;
+        this.status = StatusTopic.NO_RESPONSE;
+        this.createdAt = LocalDateTime.now();
+        this.active = true;
+    }
+    
+    // Métodos de negocio
+    public void updateData(TopicUpdateDTO topicData) {
+        if (topicData.title() != null) {
+            this.title = topicData.title();
+        }
+        if (topicData.message() != null) {
+            this.message = topicData.message();
+        }
+        if (topicData.status() != null) {
+            this.status = topicData.status();
+        }
+    }
+    
+    public void deleteTopic() {
+        this.active = false;
+    }
        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
        private Long id;
        
@@ -343,7 +575,7 @@ springdoc.swagger-ui.operationsSorter=method
    }
    ```
 
-3. **Reply**
+### 3. **Reply**
 
    ```java
    @Entity
@@ -374,7 +606,7 @@ springdoc.swagger-ui.operationsSorter=method
    }
    ```
 
-4. **Course**
+### 4. **Course**
 
    ```java
    @Entity
@@ -396,7 +628,7 @@ springdoc.swagger-ui.operationsSorter=method
    }
    ```
 
-5. **Enumeraciones**
+### 5. **Enumeraciones**
 
    ```java
    public enum TopicStatus {
@@ -1283,119 +1515,46 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
    - Crear perfiles para diferentes entornos
    - Configurar CI/CD
 
-## 🛠️ Ejecución del Proyecto
+## 5. Monitoreo
 
-1. **Requisitos previos**
-   - Java 17 o superior
-   - Maven 3.8+
-   - MySQL 8.0+
-   - Git
+- [ ] Configurar Spring Boot Actuator
+- [ ] Health checks personalizados
+- [ ] Métricas personalizadas
+- [ ] Logging centralizado
 
-2. **Configuración**
+## 6. Optimización
 
-   ```bash
-   # Clonar el repositorio
-   git clone [URL_DEL_REPOSITORIO]
-   cd forohub
-   
-   # Configurar la base de datos
-   # Crear una base de datos MySQL llamada 'forohub'
-   # Actualizar las credenciales en application.properties
-   ```
+- [ ] Implementar caché con Caffeine
+- [ ] Paginación en todos los listados
+- [ ] Filtros de búsqueda avanzados
+- [ ] Consultas optimizadas con índices
 
-3. **Ejecutar la aplicación**
+## 7. CI/CD
 
-   ```bash
-   # Ejecutar migraciones de Flyway
-   mvn flyway:migrate
-   
-   # Iniciar la aplicación
-   mvn spring-boot:run
-   ```
+- [ ] Configurar GitHub Actions
+- [ ] Pipeline de pruebas automatizadas
+- [ ] Análisis estático de código
+- [ ] Despliegue continuo en diferentes entornos
 
-4. **Acceder a la documentación**
-   - Swagger UI: <http://localhost:8080/swagger-ui.html>
-   - OpenAPI: <http://localhost:8080/v3/api-docs>
+## 🚀 Características Futuras
 
-## 📚 Recursos Adicionales
+- [ ] Búsqueda avanzada de temas
+- [ ] Sistema de votos para respuestas
+- [ ] Etiquetas para temas
+- [ ] Suscripciones a temas
+- [ ] Notificaciones en tiempo real
+- [ ] Exportación de datos
+- [ ] API para estadísticas
+- [ ] Integración con OAuth2
+- [ ] Documentación interactiva con Swagger UI
 
-- [Documentación de Spring Boot](https://spring.io/projects/spring-boot)
-- [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-- [Spring Security](https://spring.io/projects/spring-security)
-- [Documentación de MySQL](https://dev.mysql.com/doc/)
--## 📋 Plan de Implementación por Fases
-
-### 🏗️ Fase 1: Configuración Inicial (Día 1)
-
-- [x] Configurar proyecto Spring Boot
-- [x] Configurar base de datos MySQL en `application.properties`
-- [ ] Configurar Flyway para migraciones
-- [ ] Configurar Swagger/OpenAPI
-- [ ] Configurar manejo de logs
-- [ ] Configurar perfiles de desarrollo/producción
-
-### 📦 Fase 2: Modelo de Dominio (Día 2)
-
-- [ ] Implementar entidades JPA:
-  - [x] `User.java` (necesita mejoras)
-  - [x] `Topic.java` (en progreso)
-  - [ ] `Reply.java` (por implementar)
-  - [ ] `Course.java` (por implementar)
-- [ ] Crear enumeraciones:
-  - [ ] `TopicStatus.java` (NO_RESPONDIDO, NO_SOLUCIONADO, etc.)
-  - [ ] `UserRole.java` (ADMIN, USER, MODERATOR)
-
-### 🗃️ Fase 3: Persistencia (Día 3)
-
-- [ ] Implementar repositorios JPA:
-  - [ ] `UserRepository.java`
-  - [ ] `TopicRepository.java`
-  - [ ] `ReplyRepository.java`
-  - [ ] `CourseRepository.java`
-- [ ] Crear migraciones Flyway:
-  - [ ] V1__initial_schema.sql
-  - [ ] V2__add_test_data.sql
-- [ ] Configurar auditoría de entidades
-
-### 🛠️ Fase 4: Capa de Servicio (Día 4-5)
-
-- [ ] Implementar servicios con lógica de negocio:
-  - [ ] `UserService.java` (registro, autenticación, gestión de perfiles)
-  - [ ] `TopicService.java` (CRUD de tópicos, búsquedas, filtros)
-  - [ ] `ReplyService.java` (gestión de respuestas, marcar solución)
-  - [ ] `CourseService.java` (gestión de cursos)
-- [ ] Implementar DTOs:
-  - [x] `TopicRegisterDTO.java` (mejorar según necesidades)
-  - [ ] `TopicDTO.java`
-  - [ ] `ReplyDTO.java`
-  - [ ] `UserDTO.java`
-  - [ ] `CourseDTO.java`
-- [ ] Mapeo entre entidades y DTOs (usando MapStruct o manual)
-
-### 🌐 Fase 5: Controladores REST (Día 6)
-
-- [ ] Implementar controladores:
-  - [ ] `AuthController.java` (registro, login, perfil)
-  - [ ] `TopicController.java` (en progreso)
-  - [ ] `ReplyController.java`
-  - [ ] `UserController.java`
-  - [ ] `CourseController.java`
-- [ ] Manejo de excepciones globales
-- [ ] Validación de datos de entrada
-- [ ] Paginación y ordenación
-
-### 🔐 Fase 6: Seguridad (Día 7)
-
-- [ ] Configurar Spring Security
-- [ ] Implementar autenticación JWT
-- [ ] Configurar CORS
-- [ ] Proteger endpoints según roles
-- [ ] Manejo de contraseñas seguras
-
-### 🧪 Fase 7: Pruebas (Día 8)
+## 🧪 Pruebas
 
 - [ ] Pruebas unitarias (JUnit 5)
 - [ ] Pruebas de integración con `@DataJpaTest`
+- [ ] Pruebas de controlador con `@WebMvcTest`
+- [ ] Pruebas de carga
+- [ ] Pruebas de seguridad
 - [ ] Pruebas de controladores con `@WebMvcTest`
 - [ ] Pruebas de seguridad
 - [ ] Pruebas de rendimiento
@@ -1485,13 +1644,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 4. Acceder a la documentación de la API:
    - Swagger UI: <http://localhost:8080/swagger-ui.html>
-   - OpenAPI: <http://localhost:8080/v3/api-docs>
+   - OpenAPI JSON: <http://localhost:8080/v3/api-docs>
 
 ## 📚 Recursos de Aprendizaje
 
 - [Documentación de Spring Boot](https://spring.io/projects/spring-boot)
 - [Spring Data JPA](https://spring.io/projects/spring-data-jpa)
-- [Spring Security](https://spring.io/projects/spring-security)
+{{ ... }}
 - [Documentación de MySQL](https://dev.mysql.com/doc/)
 
 ## 🤝 Contribución
