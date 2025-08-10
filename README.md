@@ -1,7 +1,7 @@
 # ForoHub API REST
 
-[![Java](https://img.shields.io/badge/Java-17%2B-orange)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.1.0-brightgreen)](https://spring.io/projects/spring-boot)
+[![Java](https://img.shields.io/badge/Java-24-orange)](https://www.oracle.com/java/technologies/javase/jdk24-archive-downloads.html)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.4-brightgreen)](https://spring.io/projects/spring-boot)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > **Nota**: Este proyecto forma parte del desafío técnico del programa de formación Backend con Java y Spring Boot de [Alura Latam](https://www.aluracursos.com/) en colaboración con [ONE (Oracle Next Education)](https://www.oracle.com/ar/education/oracle-next-education/).
@@ -21,14 +21,12 @@ ForoHub es una API REST desarrollada con Spring Boot que permite la gestión de 
 
 ## 🛠️ Tecnologías
 
-- **Lenguaje**: Java 17
-- **Framework**: Spring Boot 3.1.0
-- **Base de datos**:
-  - MySQL 8.0+ (producción)
+- **Lenguaje**: Java 24
+- **Framework**: Spring Boot 3.5.4
+- **Base de datos**: MySQL 8.0+
 - **ORM**: Hibernate/JPA
 - **Migraciones**: Flyway
-- **Seguridad**: JWT
-- **Documentación**: OpenAPI
+- **Utilidades**: Lombok, Spring Boot DevTools
 
 ## 🏗️ Estructura del Proyecto
 
@@ -48,7 +46,7 @@ src/main/java/com/luiscm/forohub/
 
 ### Requisitos Previos
 
-- Java 17 o superior
+- Java 24 (JDK 24)
 - Maven 3.6.3 o superior
 - MySQL 8.0+
 
