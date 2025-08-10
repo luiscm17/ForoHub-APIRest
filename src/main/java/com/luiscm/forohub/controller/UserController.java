@@ -19,6 +19,7 @@ import jakarta.validation.Valid;
 import com.luiscm.forohub.model.dto.UserListDTO;
 import com.luiscm.forohub.model.dto.UserRegisterDTO;
 import com.luiscm.forohub.model.dto.UserUpdateDTO;
+import com.luiscm.forohub.exception.ResourceNotFoundException;
 import com.luiscm.forohub.model.User;
 import com.luiscm.forohub.repository.UserRepository;
 
@@ -38,8 +39,15 @@ public class UserController {
     }
 
     @GetMapping
-    public Page<UserListDTO> ListarUsuarios(@PageableDefault (size = 10, sort = "name")Pageable pageable) {
+    public Page<UserListDTO> ListUsers(@PageableDefault (size = 10, sort = "name")Pageable pageable) {
         return userRepository.findAllByActiveTrue(pageable).map(UserListDTO::new);
+    }
+
+    @GetMapping("/{id}")
+    public UserListDTO getUser(@PathVariable Long id) {
+        return userRepository.findById(id)
+            .map(UserListDTO::new)
+            .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
     }
 
     @Transactional

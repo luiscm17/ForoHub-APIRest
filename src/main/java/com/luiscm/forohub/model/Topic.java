@@ -2,6 +2,8 @@ package com.luiscm.forohub.model;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.luiscm.forohub.model.dto.TopicRegisterDTO;
 import com.luiscm.forohub.model.dto.TopicUpdateDTO;
@@ -12,7 +14,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,6 +24,7 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -55,11 +60,14 @@ public class Topic {
     private User user;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id", nullable = false)
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @Column(nullable = false)
     private boolean active = true;
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reply> replies = new ArrayList<>();
     
     public Topic(TopicRegisterDTO topicData, User user, Course course) {
         this.title = topicData.title();
@@ -68,7 +76,7 @@ public class Topic {
         this.course = course;
     }
 
-    public void updateData(TopicUpdateDTO topicData) {
+    public void updateData(@Valid TopicUpdateDTO topicData) {
         if (topicData.title() != null) {
             this.title = topicData.title();
         }
@@ -80,6 +88,10 @@ public class Topic {
         if (topicData.status() != null) {
             this.status = topicData.status();
         }
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public void deleteTopic() {

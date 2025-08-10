@@ -1,0 +1,82 @@
+{
+  "create_topic": {
+    "description": "Crear un nuevo tópico",
+    "method": "POST /topics",
+    "request": {
+      "title": "Duda sobre Spring Boot",
+      "message": "¿Cómo manejar excepciones en Spring Boot?",
+      "userId": 1,
+      "courseId": 1
+    },
+    "response": {
+      "topicId": 1,
+      "title": "Duda sobre Spring Boot",
+      "message": "¿Cómo manejar excepciones en Spring Boot?",
+      "status": "NO_RESPONSE",
+      "createdAt": "2025-08-10T10:05:00",
+      "active": true,
+      "author": {
+        "id": 1,
+        "name": "Ana García López"
+      },
+      "course": {
+        "courseId": 1,
+        "name": "Programación Avanzada en Java"
+      }
+    }
+  },
+  "update_topic": {
+    "description": "Actualizar un tópico existente",
+    "method": "PUT /topics",
+    "request": {
+      "topicId": 1,
+      "title": "Duda sobre Manejo de Excepciones en Spring Boot",
+      "message": "¿Cuál es la mejor forma de manejar excepciones globales en Spring Boot?",
+      "status": "NO_SOLUTION"
+    },
+    "response": {
+      "topicId": 1,
+      "title": "Duda sobre Manejo de Excepciones en Spring Boot",
+      "message": "¿Cuál es la mejor forma de manejar excepciones globales en Spring Boot?",
+      "status": "NO_SOLUTION",
+      "createdAt": "2025-08-10T10:05:00",
+      "active": true,
+      "author": {
+        "id": 1,
+        "name": "Ana García López"
+      },
+      "course": {
+        "courseId": 1,
+        "name": "Programación Avanzada en Java"
+      }
+    }
+  },
+  "deactivate_topic": {
+    "description": "Desactivar un tópico (soft delete)",
+    "method": "DELETE /topics/1",
+    "response": {
+      "status": 204,
+      "message": "Tópico desactivado exitosamente"
+    }
+  },
+  "get_topic": {
+    "description": "Obtener detalles de un tópico por ID",
+    "method": "GET /topics/1",
+    "response": {
+      "topicId": 1,
+      "title": "Duda sobre Manejo de Excepciones en Spring Boot",
+      "message": "¿Cuál es la mejor forma de manejar excepciones globales en Spring Boot?",
+      "status": "NO_SOLUTION",
+      "createdAt": "2025-08-10T10:05:00",
+      "active": true,
+      "author": {
+        "id": 1,
+        "name": "Ana García López"
+      },
+      "course": {
+        "courseId": 1,
+        "name": "Programación Avanzada en Java"
+      }
+    }
+  }
+}

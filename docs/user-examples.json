@@ -1,0 +1,63 @@
+{
+    "create_user": {
+        "description": "Crear un nuevo usuario",
+        "method": "POST /users",
+        "request": {
+            "name": "Ana García López",
+            "email": "ana.garcia@ejemplo.com",
+            "password": "AnaPass#2025",
+            "telephone": "987654321",
+            "profile": "USER"
+        },
+        "response": {
+            "id": 1,
+            "name": "Ana García López",
+            "email": "ana.garcia@ejemplo.com",
+            "telephone": "987654321",
+            "profile": "USER",
+            "active": true,
+            "createdAt": "2025-08-10T10:00:00"
+        }
+    },
+    "update_user": {
+        "description": "Actualizar datos de usuario existente",
+        "method": "PUT /users",
+        "request": {
+            "id": 1,
+            "name": "Ana García López de la Torre",
+            "email": "ana.garcia.nueva@ejemplo.com",
+            "telephone": "987654322",
+            "profile": "TEACHER"
+        },
+        "response": {
+            "id": 1,
+            "name": "Ana García López de la Torre",
+            "email": "ana.garcia.nueva@ejemplo.com",
+            "telephone": "987654322",
+            "profile": "TEACHER",
+            "active": true,
+            "createdAt": "2025-08-10T10:00:00"
+        }
+    },
+    "deactivate_user": {
+        "description": "Desactivar un usuario (soft delete)",
+        "method": "DELETE /users/1",
+        "response": {
+            "status": 204,
+            "message": "Usuario desactivado exitosamente"
+        }
+    },
+    "get_user": {
+        "description": "Obtener detalles de un usuario por ID",
+        "method": "GET /users/1",
+        "response": {
+            "id": 1,
+            "name": "Ana García López de la Torre",
+            "email": "ana.garcia.nueva@ejemplo.com",
+            "telephone": "987654322",
+            "profile": "TEACHER",
+            "active": true,
+            "createdAt": "2025-08-10T10:00:00"
+        }
+    }
+}

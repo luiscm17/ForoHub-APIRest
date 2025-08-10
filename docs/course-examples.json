@@ -1,0 +1,52 @@
+{
+    "create_course": {
+        "description": "Crear un nuevo curso",
+        "method": "POST /courses",
+        "request": {
+            "name": "Programación en Java",
+            "category": "Desarrollo de Software"
+        },
+        "response": {
+            "courseId": 1,
+            "name": "Programación en Java",
+            "category": "Desarrollo de Software",
+            "active": true,
+            "createdAt": "2025-08-10T10:00:00"
+        }
+    },
+    "update_course": {
+        "description": "Actualizar un curso existente",
+        "method": "PUT /courses",
+        "request": {
+            "courseId": 1,
+            "name": "Programación Avanzada en Java",
+            "category": "Programación Avanzada"
+        },
+        "response": {
+            "courseId": 1,
+            "name": "Programación Avanzada en Java",
+            "category": "Programación Avanzada",
+            "active": true,
+            "createdAt": "2025-08-10T10:00:00"
+        }
+    },
+    "deactivate_course": {
+        "description": "Desactivar un curso (soft delete)",
+        "method": "DELETE /courses/1",
+        "response": {
+            "status": 204,
+            "message": "Curso desactivado exitosamente"
+        }
+    },
+    "get_course": {
+        "description": "Obtener detalles de un curso por ID",
+        "method": "GET /courses/1",
+        "response": {
+            "courseId": 1,
+            "name": "Programación Avanzada en Java",
+            "category": "Programación Avanzada",
+            "active": true,
+            "createdAt": "2025-08-10T10:00:00"
+        }
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "create_reply": {
+        "description": "Crear una nueva respuesta a un tópico",
+        "method": "POST /replies",
+        "request": {
+            "message": "Puedes usar @ControllerAdvice para manejar excepciones globales en Spring Boot. Aquí tienes un ejemplo básico...",
+            "topicId": 1,
+            "userId": 2
+        },
+        "response": {
+            "replyId": 1,
+            "message": "Puedes usar @ControllerAdvice para manejar excepciones globales en Spring Boot. Aquí tienes un ejemplo básico...",
+            "createdAt": "2025-08-10T10:10:00",
+            "solution": false,
+            "active": true,
+            "author": {
+                "id": 2,
+                "name": "Carlos Ruiz"
+            },
+            "topic": {
+                "topicId": 1,
+                "title": "Duda sobre Manejo de Excepciones en Spring Boot"
+            }
+        }
+    },
+    "update_reply": {
+        "description": "Actualizar una respuesta existente",
+        "method": "PUT /replies",
+        "request": {
+            "replyId": 1,
+            "message": "Puedes usar @ControllerAdvice para manejar excepciones globales en Spring Boot. Aquí tienes un ejemplo completo con manejo de diferentes tipos de excepciones...",
+            "solution": true
+        },
+        "response": {
+            "replyId": 1,
+            "message": "Puedes usar @ControllerAdvice para manejar excepciones globales en Spring Boot. Aquí tienes un ejemplo completo con manejo de diferentes tipos de excepciones...",
+            "createdAt": "2025-08-10T10:10:00",
+            "solution": true,
+            "active": true,
+            "author": {
+                "id": 2,
+                "name": "Carlos Ruiz"
+            },
+            "topic": {
+                "topicId": 1,
+                "title": "Duda sobre Manejo de Excepciones en Spring Boot"
+            }
+        }
+    },
+    "deactivate_reply": {
+        "description": "Desactivar una respuesta (soft delete)",
+        "method": "DELETE /replies/1",
+        "response": {
+            "status": 204,
+            "message": "Respuesta desactivada exitosamente"
+        }
+    },
+    "get_reply": {
+        "description": "Obtener detalles de una respuesta por ID",
+        "method": "GET /replies/1",
+        "response": {
+            "replyId": 1,
+            "message": "Puedes usar @ControllerAdvice para manejar excepciones globales en Spring Boot. Aquí tienes un ejemplo completo con manejo de diferentes tipos de excepciones...",
+            "createdAt": "2025-08-10T10:10:00",
+            "solution": true,
+            "active": true,
+            "author": {
+                "id": 2,
+                "name": "Carlos Ruiz"
+            },
+            "topic": {
+                "topicId": 1,
+                "title": "Duda sobre Manejo de Excepciones en Spring Boot"
+            }
+        }
+    }
+}
